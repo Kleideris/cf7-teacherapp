@@ -19,5 +19,5 @@ public class TeacherReadOnlyDTO {
     private String firstname;
     private String lastname;
     private String vat;
-    private String region
+    private String region;
 }
