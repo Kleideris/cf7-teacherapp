@@ -13,13 +13,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -41,7 +39,7 @@ public class TeacherController {
 
     @PostMapping("/teachers/insert")
     public String saveTeacher(@Valid @ModelAttribute("teacherInsertDTO")TeacherInsertDTO teacherInsertDTO,
-                              BindingResult bindingResult, Model model) {
+                              BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 
         Teacher savedTeacher;
 
@@ -55,7 +53,6 @@ public class TeacherController {
             LOGGER.info("Teacher with id={} inserted", savedTeacher.getId());
             TeacherReadOnlyDTO teacherReadOnlyDTO = mapper.mapToTeacherReadOnlyDTO(savedTeacher);
             //model.addAttribute("teacher", savedTeacher); -- request scope
-            RedirectAttributes redirectAttributes;  // todo
             redirectAttributes.addFlashAttribute("teacher", mapper.mapToTeacherReadOnlyDTO(savedTeacher));
             return "redirect:/school/success";
         } catch (EntityAlreadyExistsException | EntityInvalidArgumentException e) {
@@ -65,5 +62,6 @@ public class TeacherController {
             return "teacher-form";
         }
     }
+
 
 }
